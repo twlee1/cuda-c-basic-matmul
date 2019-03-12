@@ -41,10 +41,10 @@ __global__ void matrixMul_tiling( float* C, float* A, float* B, int wA, int wB){
     int ty = threadIdx.y;         // 0 to 15 per BLK 
 
     // Declaration of the shared memory array As used to store the sub-matrix of A
-    __shared__ float As[BLOCK_SIZE][BLOCK_SIZE];
+    __shared__ float As[BLOCK_SIZE][BLOCK_SIZE];  // 16 * 16 * 4B = 1024B
     // Declaration of the shared memory array Bs used to store the sub-matrix of B
-    __shared__ float Bs[BLOCK_SIZE][BLOCK_SIZE];
-
+    __shared__ float Bs[BLOCK_SIZE][BLOCK_SIZE];  // 1024B
+   
     // Index of the first sub-matrix of A processed by the block
     int aBegin = wA * (BLOCK_SIZE * by);		// 512 * 16 * (0:15) = (0:8192:122880) 
     // Index of the last sub-matrix of A processed by the block
@@ -62,8 +62,8 @@ __global__ void matrixMul_tiling( float* C, float* A, float* B, int wA, int wB){
     for (int a = aBegin, b = bBegin; a <= aEnd; a += aStep, b += bStep) {
         // Load the matrices from device memory to shared memory; 
 	// each thread loads one element of each matrix
-        AS(ty, tx) = A[a + (wA * ty) + tx];
-        BS(tx, ty) = B[b + (wB * tx) + ty];
+        AS(ty, tx) = A[(wA * ty) + (a + tx)];  // (wA * ty)-th row, (a + tx)-th col
+        BS(tx, ty) = B[(wB * tx) + (b + ty)];  // (wB * tx)-th row, (b + ty)-th col
 
         // Synchronize to make sure the matrices are loaded
         __syncthreads();
@@ -78,8 +78,8 @@ __global__ void matrixMul_tiling( float* C, float* A, float* B, int wA, int wB){
     }
 
     // Write the block sub-matrix to device memory; each thread writes one element
-    int c = wB * BLOCK_SIZE * by + BLOCK_SIZE * bx;
-    C[c + wB * ty + tx] = Csub;
+    int c = wB * BLOCK_SIZE * by + BLOCK_SIZE * bx;  // Initial index of sub-matrix of C for each block
+    C[(wB * ty) + (c + tx)] = Csub;   // (wB * ty)-th row, (c + tx)-th col
 }
 
 #endif // #ifndef _MATRIXMUL_KERNEL_H_
