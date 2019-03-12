@@ -8,6 +8,9 @@
  * Device code.
  */
 
+// Ref:
+// Bank conflict : https://www.youtube.com/watch?v=CZgM3DEBplE
+
 #ifndef _MATRIXMUL_NOBANKCONFLICT_H_
 #define _MATRIXMUL_NOBANKCONFLICT_H_
 
