@@ -78,8 +78,14 @@ matrixMul_coalescing( float* C, float* A, float* B, int wA, int wB)
         // to shared memory; each thread loads
         // one element of each matrix
         AS(ty, tx) = A[(wA * ty) + (a + tx)];
-        BS(tx, ty) = B[(wB * ty) + (b + tx)];  // !!! GMEM -> SMEM : tx, ty indexing is switched
-	                                       // so that BS is transposed.
+        BS(tx, ty) = B[(wB * ty) + (b + tx)];  // !!! GMEM -> SMEM : tx, ty indexing is switched. 
+	                                       // So, BS is transposed.
+	    
+	                                       // 1 transaction size for GMEM is 128B.
+	                                       // But, we are reading a row of A (4B*16=64B) with 1 transaction.
+	                                       // So, we are losing 64B per transaction.
+	                                       // If we can change memmory access pattern of A, we can optimize more.
+	                                       // (Theoritically, we can reduce the number of GMEM accessses up to 1/2.)
 
         // Synchronize to make sure the matrices are loaded
         __syncthreads();
