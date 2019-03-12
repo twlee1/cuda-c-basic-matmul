@@ -7,6 +7,9 @@
  * Device code.
  */
 
+// Ref: 
+// 1. Memory coalessing : https://cvw.cac.cornell.edu/gpu/coalesced
+
 #ifndef _MATRIXMUL_COALESCING_H_
 #define _MATRIXMUL_COALESCING_H_
 
@@ -70,12 +73,11 @@ matrixMul_coalescing( float* C, float* A, float* B, int wA, int wB)
              a <= aEnd;
              a += aStep, b += bStep) {
 
-
         // Load the matrices from device memory
         // to shared memory; each thread loads
         // one element of each matrix
-        AS(ty, tx) = A[a + wA * ty + tx];
-        BS(tx, ty) = B[b + wB * ty + tx];
+        AS(ty, tx) = A[(wA * ty) + (a + tx)];
+        BS(tx, ty) = B[(wB * ty) + (b + tx)];  // GMEM -> SMEM : tx, ty indexing is switched
 
         // Synchronize to make sure the matrices are loaded
         __syncthreads();
@@ -95,7 +97,7 @@ matrixMul_coalescing( float* C, float* A, float* B, int wA, int wB)
     // Write the block sub-matrix to device memory;
     // each thread writes one element
     int c = wB * BLOCK_SIZE * by + BLOCK_SIZE * bx;
-    C[c + wB * ty + tx] = Csub;
+    C[(wB * ty) + (c + tx)] = Csub;
 }
 
 #endif // #ifndef _MATRIXMUL_KERNEL_H_
