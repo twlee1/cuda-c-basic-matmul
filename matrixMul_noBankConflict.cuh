@@ -79,7 +79,7 @@ matrixMul_noBankConflict( float* C, float* A, float* B, int wA, int wB)
         // to shared memory; each thread loads
         // one element of each matrix
         AS(ty, tx) = A[a + wA * ty + tx];
-        BS(ty, tx) = B[b + wB * ty + tx];   // 
+        BS(ty, tx) = B[b + wB * ty + tx];   
 
         // Synchronize to make sure the matrices are loaded
         __syncthreads();
