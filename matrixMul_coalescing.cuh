@@ -95,7 +95,7 @@ matrixMul_coalescing( float* C, float* A, float* B, int wA, int wB)
         // of the block sub-matrix
         for (int k = 0; k < BLOCK_SIZE; ++k)
 	  Csub += AS(ty, k) * BS(tx, k);  // !!! x, y indexing of BS is switched
-	                                  
+	                                  // bank conflict!                              
 	    
         // Synchronize to make sure that the preceding
         // computation is done before loading two new
