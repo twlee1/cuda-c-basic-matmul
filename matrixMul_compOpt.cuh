@@ -7,6 +7,8 @@
  * Device code.
  */
 
+// REF: http://mlwiki.org/index.php/Matrix-Matrix_Multiplication#Sum_of_Outer_Products
+
 #ifndef _MATRIXMUL_COMPOPT_H_
 #define _MATRIXMUL_COMPOPT_H_
 
