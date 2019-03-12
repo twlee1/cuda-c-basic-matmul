@@ -86,4 +86,4 @@ __global__ void matrixMul_tiling( float* C, float* A, float* B, int wA, int wB){
 
 // the amount of computation = 2 x M x N x K FLOP = 2 * 384(WC) * 256(HC) * 512(WA) = 100663296 FLOP
 // the amount of global memory access = 2 x M x N x K / B word = 2 * 384 * 256 * 512 / 16 = 6291456 * 4B = 25165824 B
-// computation : memory op. ratio = 100663296 / 25165824 B = 4
+// computation : memory access ratio = 100663296 / 25165824 B = 4
