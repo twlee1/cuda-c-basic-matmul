@@ -9,6 +9,7 @@
 
 // Ref: 
 // 1. Memory coalessing : https://cvw.cac.cornell.edu/gpu/coalesced
+// 2. Bank conflict : https://www.youtube.com/watch?v=CZgM3DEBplE
 
 #ifndef _MATRIXMUL_COALESCING_H_
 #define _MATRIXMUL_COALESCING_H_
