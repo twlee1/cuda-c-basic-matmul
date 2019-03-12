@@ -7,6 +7,8 @@
  * Device code.
  */
 
+// Ref: https://www.seas.upenn.edu/~cis565/Lectures2011S/Lecture12.pdf
+
 #ifndef _MATRIXMUL_PREFETCH_H_
 #define _MATRIXMUL_PREFETCH_H_
 
