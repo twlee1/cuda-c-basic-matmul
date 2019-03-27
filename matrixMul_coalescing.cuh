@@ -85,7 +85,7 @@ matrixMul_coalescing( float* C, float* A, float* B, int wA, int wB)
 	                                       // But, we are reading a row of A (4B*16=64B) with 1 transaction.
 	                                       // So, we are losing 64B per transaction.
 	                                       // If we can change memory access pattern of A, we can optimize more.
-	                                       // (Theoritically, we can reduce the number of GMEM accessses up to 1/2.)
+	                                       // (Theoritically, we can reduce the number of GMEM accesses up to 1/2.)
 
         // Synchronize to make sure the matrices are loaded
         __syncthreads();
